@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة قواعد الإنجليزية - تانية باك</title>
+    <style>
+        /* تعريف متغيرات الألوان الاحترافية لضمان التناسق البصري */
+        :root {
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --primary: #1e3a8a;
+            --secondary: #2563eb;
+            --accent-green: #16a34a;
+            --accent-orange: #ea580c;
+            --accent-red: #dc2626;
+            --border-color: #e2e8f0;
+            --text-dark: #0f172a;
+            --text-muted: #475569;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            padding: 30px 20px;
+            line-height: 1.7;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 35px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.2);
+        }
+
+        header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        header p {
+            font-size: 15px;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Form Styling */
+        .form-section {
+            background-color: var(--bg-card);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            margin-bottom: 40px;
+            border-top: 6px solid var(--primary);
+            border-left: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .form-section h2 {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: #f8fafc;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            border-color: var(--secondary);
+            background-color: #fff;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            outline: none;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 90px;
+        }
+
+        .btn-submit {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.15);
+        }
+
+        .btn-submit:hover {
+            background-color: var(--secondary);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.2);
+        }
+
+        .btn-submit.edit-mode {
+            background-color: var(--accent-orange);
+            box-shadow: 0 4px 12px rgba(234, 88, 12, 0.15);
+        }
+
+        .btn-submit.edit-mode:hover {
+            opacity: 0.95;
+            box-shadow: 0 6px 20px rgba(234, 88, 12, 0.25);
+        }
+
+        /* Notebook Spread Styling */
+        .notebook-title {
+            font-size: 22px;
+            margin-bottom: 25px;
+            border-right: 5px solid var(--secondary);
+            padding-right: 12px;
+            color: var(--text-dark);
+            font-weight: 700;
+        }
+
+        .rule-spread {
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            margin-bottom: 40px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            display: table;
+            width: 100%;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .rule-spread:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.07);
+        }
+
+        /* Actions Toolbar */
+        .rule-actions {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .btn-action {
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            color: white;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .btn-action:hover {
+            transform: translateY(-1px);
+            opacity: 0.95;
+        }
+
+        .btn-edit {
+            background-color: var(--accent-orange);
+        }
+
+        .btn-delete {
+            background-color: var(--accent-red);
+        }
+
+        .btn-print {
+            background-color: #334155;
+        }
+
+        .page {
+            display: table-cell;
+            width: 50%;
+            padding: 40px;
+            vertical-align: top;
+        }
+
+        .right-page {
+            border-left: 2px dashed #e2e8f0;
+            background-color: #fffffe;
+        }
+
+        .left-page {
+            background-color: #fafbfd;
+        }
+
+        .rule-title {
+            font-size: 24px;
+            color: var(--primary);
+            margin-bottom: 25px;
+            font-weight: 800;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 12px;
+            max-width: 65%;
+        }
+
+        .box-form {
+            background-color: #f1f5f9;
+            border-right: 6px solid var(--secondary);
+            padding: 18px;
+            border-radius: 8px;
+            font-size: 20px;
+            font-weight: 700;
+            font-family: 'Consolas', 'Courier New', monospace;
+            color: #1e293b;
+            margin-bottom: 25px;
+            text-align: center;
+            direction: ltr;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        .section-heading {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            margin-top: 20px;
+            color: var(--text-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: #e2e8f0;
+            color: #334155;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-left: 8px;
+            margin-bottom: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.03);
+        }
+
+        .usage-text {
+            font-size: 15px;
+            color: var(--text-muted);
+            background: #fff;
+            padding: 14px 18px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.01);
+        }
+
+        .example-block {
+            background-color: #f0fdf4;
+            border-right: 5px solid var(--accent-green);
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(22, 163, 74, 0.02);
+        }
+
+        .example-item {
+            font-family: 'Cambria', 'Georgia', serif;
+            font-style: italic;
+            color: #14532d;
+            direction: ltr;
+            text-align: left;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .example-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .neg-q-block {
+            background-color: #f8fafc;
+            border: 1px solid var(--border-color);
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14.5px;
+            color: var(--text-muted);
+        }
+
+        .trick-box {
+            background-color: #fff7ed;
+            border: 1px dashed #fdba74;
+            border-right: 6px solid var(--accent-orange);
+            padding: 18px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(234, 88, 12, 0.02);
+        }
+
+        .trick-box h4 {
+            color: var(--accent-orange);
+            margin-bottom: 8px;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        @media (max-width: 768px) {
+            .rule-spread {
+                display: block;
+                position: relative;
+                padding-top: 55px;
+            }
+
+            .page {
+                display: block;
+                width: 100%;
+                padding: 25px;
+            }
+
+            .right-page {
+                border-left: none;
+                border-bottom: 2px dashed #e2e8f0;
+            }
+
+            .rule-actions {
+                top: 12px;
+                left: 12px;
+                width: calc(100% - 24px);
+                justify-content: flex-end;
+            }
+
+            .rule-title {
+                max-width: 100%;
+            }
+        }
+
+        /* Print Media Styles */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            .print-area,
+            .print-area * {
+                visibility: visible;
+            }
+
+            .print-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                box-shadow: none;
+                border: none;
+            }
+
+            .rule-actions {
+                display: none;
+            }
+
+            .rule-spread:hover {
+                transform: none;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <h1>دفتر القواعد التفاعلي الذكي 📓</h1>
+            <p>نظام رقمي متكامل لحفظ، تعديل، وطباعة قواعد الإنجليزية لتانية باك</p>
+        </header>
+
+        <section class="form-section">
+            <h2 id="formHeader">➕ إضافة قاعدة جديدة للكشكول</h2>
+            <form id="grammarForm">
+                <input type="hidden" id="editIndex" value="">
+                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 250px;">
+                        <label for="ruleName">اسم القاعدة / الزمن</label>
+                        <input type="text" id="ruleName" placeholder="مثال: Present Perfect" required>
+                    </div>
+                    <div style="flex: 1; min-width: 250px;">
+                        <label for="ruleStructure">التكوين الهيكلي (Form)</label>
+                        <input type="text" id="ruleStructure" placeholder="مثال: S + have/has + P.P" required
+                            style="direction: ltr;">
+                    </div>
+                </div>
+
+                <div style="margin-top: 15px;">
+                    <label for="ruleUsage">الاستخدام</label>
+                    <textarea id="ruleUsage" placeholder="متى نستخدم هذه القاعدة..." required></textarea>
+                </div>
+
+                <div style="margin-top: 15px;">
+                    <label for="keyWords">الكلمات الدالة (افصل بينها بفاصلة , )</label>
+                    <input type="text" id="keyWords" placeholder="since, for, already, yet">
+                </div>
+
+                <div style="margin-top: 15px;">
+                    <label for="examples">أمثلة تطبيقية (كل مثال في سطر منفصل)</label>
+                    <textarea id="examples" placeholder="اكتب الأمثلة هنا..." required
+                        style="direction: ltr; text-align: left;"></textarea>
+                </div>
+
+                <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 15px;">
+                    <div style="flex: 1; min-width: 250px;">
+                        <label for="negQuestion">النفي والسؤال</label>
+                        <textarea id="negQuestion" placeholder="صيغة النفي وصناعة السؤال..."></textarea>
+                    </div>
+                    <div style="flex: 1; min-width: 250px;">
+                        <label for="tricks">⚠️ التريكات وملاحظات الامتحانات المهمة</label>
+                        <textarea id="tricks" placeholder="ملاحظات المستر الهامة..."></textarea>
+                    </div>
+                </div>
+
+                <button type="submit" id="submitBtn" class="btn-submit">حفظ القاعدة في الكشكول 🚀</button>
+            </form>
+        </section>
+
+        <h2 class="notebook-title">📋 تصفح كشكول القواعد الخاص بك</h2>
+        <div id="rulesContainer" class="rules-container"></div>
+    </div>
+
+    <script>
+        // Array to store all rules
+        let rulesData = [];
+
+        // Load data on start
+        window.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('notebookRules')) {
+                rulesData = JSON.parse(localStorage.getItem('notebookRules'));
+                renderRules();
+            } else {
+                // Initial demo data if empty
+                rulesData = [{
+                    name: "Present Perfect Simple (المضارع التام البسيط)",
+                    structure: "S + have / has + P.P (V3)",
+                    usage: "يعبر عن حدث بدأ في الماضي وله أثر في الحاضر، أو حدث انتهى للتو.",
+                    keywords: "since, for, already, yet",
+                    examples: "I have already finished my English homework.\nShe has lived in Cairo since 2018.",
+                    negQuestion: "النفي: S + haven't / hasn't + P.P\nالسؤال: Have / Has + S + P.P ...?",
+                    tricks: "has gone to: ذهب ولم يعد بعد.\nhas been to: ذهب وعاد من المكان."
+                }];
+                saveAndRender();
+            }
+        });
+
+        const form = document.getElementById('grammarForm');
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const index = document.getElementById('editIndex').value;
+            const newRule = {
+                name: document.getElementById('ruleName').value,
+                structure: document.getElementById('ruleStructure').value,
+                usage: document.getElementById('ruleUsage').value,
+                keywords: document.getElementById('keyWords').value,
+                examples: document.getElementById('examples').value,
+                negQuestion: document.getElementById('negQuestion').value,
+                tricks: document.getElementById('tricks').value
+            };
+
+            if (index === "") {
+                // Add mode
+                rulesData.unshift(newRule);
+            } else {
+                // Edit mode
+                rulesData[index] = newRule;
+                document.getElementById('editIndex').value = "";
+                document.getElementById('submitBtn').innerText = "حفظ القاعدة في الكشكول 🚀";
+                document.getElementById('submitBtn').classList.remove('edit-mode');
+                document.getElementById('formHeader').innerText = "➕ إضافة قاعدة جديدة للكشكول";
+            }
+
+            saveAndRender();
+            form.reset();
+        });
+
+        function saveAndRender() {
+            localStorage.setItem('notebookRules', JSON.stringify(rulesData));
+            renderRules();
+        }
+
+        function renderRules() {
+            const container = document.getElementById('rulesContainer');
+            container.innerHTML = '';
+
+            rulesData.forEach((rule, index) => {
+                // Badges
+                let badgesHTML = '';
+                if (rule.keywords.trim() !== "") {
+                    rule.keywords.split(',').forEach(word => {
+                        if (word.trim() !== "") badgesHTML += `<span class="badge">${word.trim()}</span>`;
+                    });
+                }
+
+                // Examples
+                let examplesHTML = '';
+                rule.examples.split('\n').forEach(line => {
+                    if (line.trim() !== "") examplesHTML += `<div class="example-item">${line.trim()}</div>`;
+                });
+
+                const layout = `
+                <div class="rule-spread" id="rule-card-${index}">
+                    <div class="rule-actions">
+                        <button class="btn-action btn-print" onclick="printRule(${index})">طباعة 🖨️</button>
+                        <button class="btn-action btn-edit" onclick="editRule(${index})">تعديل ✏️</button>
+                        <button class="btn-action btn-delete" onclick="deleteRule(${index})">حذف 🗑️</button>
+                    </div>
+                    
+                    <div class="page right-page">
+                        <div class="rule-title">${rule.name}</div>
+                        <div class="section-heading">📐 التكوين الهيكلي:</div>
+                        <div class="box-form">${rule.structure}</div>
+                        <div class="section-heading">💡 الاستخدام:</div>
+                        <div class="usage-text">${rule.usage.replace(/\n/g, '<br>')}</div>
+                        <div class="section-heading">🔑 الكلمات الدالة:</div>
+                        <div class="badge-list">${badgesHTML}</div>
+                    </div>
+                    
+                    <div class="page left-page">
+                        <div class="section-heading" style="margin-top:0;">📝 أمثلة حية:</div>
+                        <div class="example-block">${examplesHTML}</div>
+                        <div class="section-heading">🔄 النفي والسؤال:</div>
+                        <div class="neg-q-block">${rule.negQuestion.replace(/\n/g, '<br>')}</div>
+                        <div class="trick-box">
+                            <h4>⚠️ تريكات الامتحانات والملاحظات:</h4>
+                            <p>${rule.tricks.replace(/\n/g, '<br>')}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+                container.insertAdjacentHTML('beforeend', layout);
+            });
+        }
+
+        // Action: Delete
+        function deleteRule(index) {
+            if (confirm("هل أنت متأكد من حذف هذه القاعدة من كشكولك؟")) {
+                rulesData.splice(index, 1);
+                saveAndRender();
+            }
+        }
+
+        // Action: Edit Setup
+        function editRule(index) {
+            const rule = rulesData[index];
+            document.getElementById('ruleName').value = rule.name;
+            document.getElementById('ruleStructure').value = rule.structure;
+            document.getElementById('ruleUsage').value = rule.usage;
+            document.getElementById('keyWords').value = rule.keywords;
+            document.getElementById('examples').value = rule.examples;
+            document.getElementById('negQuestion').value = rule.negQuestion;
+            document.getElementById('tricks').value = rule.tricks;
+
+            document.getElementById('editIndex').value = index;
+            document.getElementById('submitBtn').innerText = "تعديل وحفظ التغييرات ✏️";
+            document.getElementById('submitBtn').classList.add('edit-mode');
+            document.getElementById('formHeader').innerText = "✏️ تعديل القاعدة الحالية";
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Action: Print Single Rule
+        function printRule(index) {
+            const card = document.getElementById(`rule-card-${index}`);
+            card.classList.add('print-area');
+            window.print();
+            card.classList.remove('print-area');
+        }
+    </script>
+</body>
+
+</html>
